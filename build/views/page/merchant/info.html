@@ -1,0 +1,75 @@
+<% title="商户资料"%>
+<% include ../../layouts/header.html%>
+<div class="">
+    <div class=" ">
+        <form class="form-horizontal pl-15 merchant-info-form width-70-100">
+            <h4>商户资料</h4>
+            <input type="hidden" name="typeCode" value="<%=merchantInfo.typeCode%>">
+            <div class="form-group pt-40 ">
+                <label class="col-sm-2 control-label">商户名称</label>
+                <div class="col-sm-6">
+                    <input  class="form-control" name="supplierName" value="<%=merchantInfo.supplierName%>" readonly placeholder="商户名称">
+                </div>
+            </div>
+            <div class="form-group pt-40 ">
+                <label class="col-sm-2 control-label">商户类型</label>
+                <div class="col-sm-6">
+                    <input  class="form-control" value="<%=({
+                    'bar':'酒吧',
+                    'clear':'清吧',
+                    'ktv':'ktv',
+                    })[merchantInfo.typeCode]%>" readonly placeholder="商户类型">
+                </div>
+            </div>
+            <div class="form-group pt-40 ">
+                <label class="col-sm-2 control-label">联系电话</label>
+                <div class="col-sm-6">
+                    <input  class="form-control" value="<%=merchantInfo.supplierPhone%>" name="supplierPhone" placeholder="联系电话">
+                </div>
+            </div>
+            <div class="form-group pt-40 ">
+                <label class="col-sm-2 control-label">商户地区</label>
+                <div class="col-sm-6">
+                    <input  class="form-control" value="<%=merchantInfo.cityName%>" readonly placeholder="商户地区">
+                </div>
+            </div>
+            <div class="form-group pt-40 ">
+                <label class="col-sm-2 control-label">商户地址</label>
+                <div class="col-sm-6">
+                    <input  class="form-control" value="<%=merchantInfo.supplierAddr%>" name="supplierAddr" placeholder="商户地址">
+                </div>
+            </div>
+            <div class="form-group pt-40 ">
+                <label class="col-sm-2 control-label">公司简介</label>
+                <div class="col-sm-6">
+                    <input  class="form-control" value="<%=merchantInfo.companyProfile%>" name="companyProfile" placeholder="公司简介">
+                </div>
+            </div>
+            <div class="form-group pt-40 ">
+                <label class="col-sm-2 control-label">团队简介</label>
+                <div class="col-sm-6">
+                    <input  class="form-control" value="<%=merchantInfo.teamProfile%>" name="teamProfile" placeholder="团队简介">
+                </div>
+            </div>
+            <div class="form-group pt-40 ">
+                <label class="col-sm-2 control-label">地址经纬度</label>
+                <div class="col-sm-6">
+                    <input  class="form-control" value="<%=[merchantInfo.gpsLongitude || '',merchantInfo.gpsDimension || ''].join().replace(/^\,$/,'')%>"
+                            name="gpsLongitude" placeholder="经纬度">
+                </div>
+                <div class="col-sm-2"><a href="//api.map.baidu.com/lbsapi/getpoint/index.html" target="_blank" class="btn btn-default">获取</a></div>
+            </div>
+            <div class="form-group" >
+                <label class="control-label col-sm-2">显示头图</label>
+                <div class="col-sm-6">
+                    <div class="show-file-content upload-content" show-name="headFile" showImg="<%=merchantInfo.headFile%>"></div>
+                </div>
+            </div>
+            <div class="form-group pt-40">
+                <label class="col-sm-2 control-label"></label><button type="button" class="btn btn-primary btn-lg do-submit-btn">更新</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/js/build/merchant-info.js"></script>
+<% include ../../layouts/footer.html%>

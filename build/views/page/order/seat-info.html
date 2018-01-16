@@ -1,0 +1,187 @@
+<% title="订桌详情"%>
+<% include ../../layouts/header.html%>
+<div class="">
+    <div class=" ">
+        <div class="form-horizontal pl-15 merchant-info-form ">
+            <%
+            seatOrder = seatOrder[0]
+            %>
+            <h4>订桌详情</h4>
+            <div class="flex-between">
+                <div class="width-50-100">
+                    <div class="form-group pt-40">
+                        <label class="col-sm-2 control-label">订单号</label>
+                        <div class="col-sm-6">
+                            <input  class="form-control" name="supplierName" value="<%=seatOrder.orderNo%>" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="width-50-100 flex-left">
+                    <%if(seatOrder.tableStatus!=='y'){%>
+                    <span class="mr-10">不允许拼桌</span>
+                    <%}else if(ping && ping.length){%>
+                    <span class="mr-10">有拼桌</span>
+                    <%}else{%>
+                    <span class="mr-10">允许拼桌</span>
+                    <%}%>
+                    <%if(seatOrder.dcStatus==='init'){%>
+                    <button class="btn btn-primary cost-btn">到场</button>
+                    <%}%>
+                    <%if(seatOrder.dcStatus==='wait'){%>
+                    <!--<button class="btn btn-primary cost-done-btn">离场</button>-->
+                    <%}%>
+                </div>
+            </div>
+            <div class="status-list flex-left pb-40">
+                <div class="item mr-30 active">
+                    <div class="flex-center">
+                        <div class="number">1</div>
+                        <div class="">订桌</div>
+                    </div>
+                    <div class="pt-20"><%=seatOrder.bookTime%></div>
+                </div>
+                <div class="item mr-30 <%=seatOrder.payStatus==='ALREADY_PAY'?'active':''%>">
+                    <div class="flex-center">
+                        <div class="number">2</div>
+                        <div>已支付</div>
+                    </div>
+                    <div></div>
+                </div>
+                <div class="item mr-30 <%=seatOrder.dcStatus!=='init'?'active':''%>">
+                    <div class="flex-center">
+                        <div class="number">3</div>
+                        <div>到场</div>
+                    </div>
+                    <div><%=seatOrder.arriveTime%></div>
+                </div>
+                <div class="item mr-30 <%=seatOrder.dcStatus==='done'?'active':''%>">
+                    <div class="flex-center">
+                        <div class="number">3</div>
+                        <div>已使用</div>
+                    </div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="">
+                <h3>客户信息</h3>
+                <table class="table width-100-100">
+                    <tr>
+                        <td>用户名</td>
+                        <td>联系方式</td>
+                        <td>入桌方式</td>
+                        <td>是否下单</td>
+                    </tr>
+                    <tr>
+                        <td><%=seatOrder.nickName%></td>
+                        <td><%=seatOrder.mobile%></td>
+                        <td>订桌</td>
+                        <td><%=order&&order.find(function(a){return a.userId === seatOrder.userId})?'是':'否'%></td>
+                    </tr>
+                    <%ping&&ping.filter(function(a){return a.isAgree === 'Y';}).forEach(function(a){
+                    %>
+                    <tr>
+                        <td><%=a.nickName%></td>
+                        <td><%=a.mobile%></td>
+                        <td>拼桌</td>b
+                        <td><%=order&&order.find(function(b){return a.userId === b.userId})?'是':'否'%></td>
+                    </tr>
+                    <%})%>
+                </table>
+            </div>
+            <div class="">
+                <h3>桌位信息/包房信息</h3>
+                <table class="table width-100-100">
+                    <tr>
+                        <td>桌号/房号</td>
+                        <td>允许拼桌</td>
+                        <td>最低消费</td>
+                        <td>预订时间</td>
+                        <td>可抵用金额</td>
+                    </tr>
+                    <tr>
+                        <td><%=seatOrder.seatName%></td>
+                        <td><%=seatOrder.tableStatus==='y'?'是':'否'%></td>
+                        <td><%=seatOrder.lowCostAmount/100%></td>
+                        <td><%=useCommon.parseDate(seatOrder.bookTime,'Y-m-d')%></td>
+                        <td><%=seatOrder.deductibleAmount/100%></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <h3>消费订单信息</h3>
+                <table class="table width-100-100">
+                    <tr>
+                        <td>订单号</td>
+                        <td>用户</td>
+                        <td>联系方式</td>
+                        <td>订单金额</td>
+                        <td>抵扣金额</td>
+                        <td>下单时间</td>
+                    </tr>
+                    <%order&&order.forEach(function(a){%>
+                    <tr>
+                        <td><%=a.orderNo%></td>
+                        <td><%=a.nickName%></td>
+                        <td><%=a.mobile%></td>
+                        <td><%=a.orderMoney/100%></td>
+                        <td><%=a.deuceMoney/100%></td>
+                        <td><%=a.rowAddTime%></td>
+                    </tr>
+                    <%})%>
+                </table>
+            </div>
+            <div>
+                <h3>消费品信息</h3>
+                <table class="table width-100-100">
+                    <tr>
+                        <td>订单号</td>
+                        <td>名称</td>
+                        <td>数量</td>
+                        <td>总价</td>
+                        <td>类型</td>
+                        <td>状态</td>
+                        <td>购买人</td>
+                        <td>操作人</td>
+                        <td>服务员</td>
+                        <td>备注</td>
+                    </tr>
+                    <%
+                    var detailLs = [];
+                    order&&order.forEach(function(a){
+                        a.detailLs.forEach(function(b){
+                            b.orderNo = a.orderNo;
+                            b.buyName = a.nickName;
+                            b.source='购买';
+                        });
+                        detailLs = detailLs.concat(a.detailLs);
+                    })
+                    give&&give.forEach(function(a){
+                        a.detailLs.forEach(function(b){
+                            b.orderNo = a.orderNo;
+                    b.source='赠送';
+                    b.buyName = a.giveNickName;
+                        });
+                        detailLs = detailLs.concat(a.detailLs);
+                    })
+                    console.log(detailLs);
+                    detailLs&&detailLs.forEach(function(a){%>
+                    <tr>
+                        <td><%=a.orderNo%></td>
+                        <td><%=a.goodsName%></td>
+                        <td><%=a.quantity%></td>
+                        <td><%=(a.unitPrice * a.quantity)/100%></td>
+                        <td><%=a.source%></td>
+                        <td><%=(a.status==='send'?'已配送':'未配送')%></td>
+                        <td><%=a.buyName%></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <%})%>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/build/order-info.js"></script>
+<% include ../../layouts/footer.html%>
