@@ -25,6 +25,5 @@ var archiveFilePath = path.join(__dirname, package.name + '-' + package.version 
 	zipArchive.bulk([
 		{ src: zipList}
 	]);
-
 	zipArchive.finalize();
 	console.log('打包路径：%s', archiveFilePath);

@@ -1,4 +1,4 @@
-WY.captureImage  = function(video , call){
+Yue.captureImage  = function(video , call){
     var scale = .8;
      if(typeof video === 'string'){
          var str = video;

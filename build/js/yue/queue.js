@@ -1,7 +1,7 @@
-yue.queue = function(){
+Yue.queue = function(){
     this.queues = [];
 };
-yue.queue.prototype = {
+Yue.queue.prototype = {
     add:function(func){
         console.log('queue add');
         this.queues.push(func);

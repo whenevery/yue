@@ -6,13 +6,14 @@
     * js  加载的js
     * loadNew 每次获取新的view
     * */
-    var router = yue.router = {};
+    var router = Yue.router = {};
     var routers = [],prevRouter;
+    var historyRouters = [];
     var options = router.options = {
         mode:'history',
-        viewUrl:'/yue/view',
+        viewUrl:'/Yue/view',
         viewKey:'view',
-        htmlUrl:'/yue/html',
+        htmlUrl:'/Yue/html',
         htmlKey:'html',
     };
     router.start = function(url){
@@ -26,6 +27,7 @@
         router.push(url);
     };
     function pathTest(path , url){
+        if(isRealPath(path))return false;
         return new RegExp(path.replace(/\*/g,'.*').replace(/\:\w+/g,'\\w+')).test(url);
     }
     function isRealPath(path){
@@ -49,23 +51,49 @@
         return params;
     }
     function findRouter(url){
-        var r;
-        routers.every(function(a){
-            if((a.name === url && isRealPath(a.path)) || a.path === url || pathTest(a.path , url)){
-                r = a;
-                return false;
-            }
-            return true;
+        return routers.find(function(a){
+            return a.path === url;
         });
-        return r;
     }
+    function setUrl(path , sts){
+        if(historyRouters[historyRouters.length - 2 ] === path){
+            historyRouters.pop();
+        }else{
+            historyRouters.push(path);
+            if(router.options.mode === 'history'){
+                if(prevRouter){
+                    if(sts){
+                        history.replaceState({path:path}, "", path);
+                    }
+                    else{
+                        history.pushState({path:path}, "", path);
+                    }
+                }
+            }else{
+                if(prevRouter)if(sts){
+                    history.replaceState({path:path});
+                }
+                else{
+                    history.pushState({path:path});
+                }
+                location.hash = path;
+            }
+        }
+
+    }
+    var lastRouter;
     router.push = function(options){
-        if(typeof options === 'object'){
+        if(options && typeof options === 'object'){
             routers.push(options);
         }else{
-            console.log('router.push' , options);
-            var r = findRouter(options);
-            yue.clearHtml();
+            if(options === historyRouters[historyRouters.length -1])return false;
+            lastRouter = options;
+            var r;
+            if(options === null){
+                r = routers[0];
+            }
+            else r = findRouter(options);
+            Yue.trigger('router-before');
             if(r){
                 var realRouter = {
                     originPath:r.path,
@@ -75,10 +103,9 @@
                     component:r.component,
                     js:r.js,
                     name:r.name,
-                    query:yue.common.getHrefData(getRealPath(options , r))
+                    query:Yue.common.getHrefData(getRealPath(options , r))
                 };
-                console.log(realRouter);
-                var newQueue = new yue.queue();
+                var newQueue = new Yue.queue();
                 newQueue.add(function(next){
                     console.log('newQueue beforeEach');
                     if(router.beforeEach){
@@ -88,28 +115,23 @@
                     }
                 });
                 newQueue.add(function(next){
-                    yue.trigger('router-before');
                     next();
                 });
                 var jsData;
                 newQueue.add(function(next){
                     router.load(realRouter.js , function(view){
-                        jsData = yue.loadJs(view);
+                        jsData = Yue.loadJs(view);
                         console.log(jsData);
                         next();
                     });
                 });
                 newQueue.add(function(next){
-                    console.log('newQueue router');
-                    if(router.options.mode === 'history'){
-                        if(prevRouter)history.pushState({path:realRouter.path}, "", realRouter.path);
-                    }else{
-                        if(prevRouter)history.pushState({path:realRouter.path});
-                        location.hash = realRouter.path;
-                    }
+                    console.log('newQueue router' , realRouter);
+                    setUrl(realRouter.path);
                     router.load(realRouter.component , function(view){
-                        yue.loadView(view , jsData , function(){
-
+                        realRouter.view = view;
+                        Yue.loadView(realRouter , jsData , function(autoYueObj){
+                            Yue.autoYueObj = autoYueObj;
                         });
                     } , realRouter.loadNew);
                     prevRouter = realRouter;
@@ -123,14 +145,25 @@
                     next();
                 });
                 newQueue.start();
+            }else{
+                setUrl(options);
+                prevRouter = {
+                    name:options,
+                    path:options
+                };
             }
         }
     };
     window.addEventListener("popstate", function() {
         var currentState = history.state;
-        if(currentState){
-            router.push(currentState.path);
+        console.log('currentState',currentState);
+        console.log('firstRouter',historyRouters[0]);
+        if(!currentState || currentState === historyRouters[0]){
+            // currentState = historyRouters[0];
+            // setUrl(currentState , 1);
+            // return false;
         }
+        router.push(currentState && currentState.path || currentState);
     });
     var loadView = {};
     router.load = function(url , call , sts){
@@ -142,7 +175,7 @@
         var urlData = {};
         if(isString && /^http/.test(url)){
             urlData[options.htmlKey] = url;
-            requestUrl = yue.common.addUrlParam(options.htmlUrl , urlData);
+            requestUrl = Yue.common.addUrlParam(options.htmlUrl , urlData);
         }else if(isString && /^\//.test(url)){
             requestUrl = url;
         }else{
@@ -151,11 +184,11 @@
             }else{
                 urlData = url;
             }
-            requestUrl = yue.common.addUrlParam(options.viewUrl , urlData);
+            requestUrl = Yue.common.addUrlParam(options.viewUrl , urlData);
         }
         console.log('url',url );
         console.log('requestUrl',requestUrl );
-        yue.get(requestUrl,function(view){
+        Yue.get(requestUrl,function(view){
             call && call(loadView[url] = view);
         });
     }

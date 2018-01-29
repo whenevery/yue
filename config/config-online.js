@@ -5,7 +5,7 @@ module.exports = {
     wechatLoginUrl:'http://47.100.20.78:3002/wechat/entrance/test?port=3003&host=47.100.20.78',
     wechatJssdkUrl:'http://47.100.20.78:3002/wechat/jssdk/test',
     "log4js":{
-        "customBaseDir" :"../logs/merchant-pc/",
+        "customBaseDir" :"../logs/yue/",
         "customDefaultAtt" :{
             "type": "dateFile",
             "absolute": true,

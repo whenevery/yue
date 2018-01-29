@@ -1,7 +1,7 @@
 (function(){
     var isLoading;
     var $loadingWindow
-    WY.loading = function(sts){
+    Yue.loading = function(sts){
         if(sts === 0){
             isLoading = 0;
             if($loadingWindow)$loadingWindow.hide();

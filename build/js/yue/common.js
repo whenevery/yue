@@ -1,14 +1,14 @@
-yue.common = function(object , method , a , b , c , d , e){
+Yue.common = function(object , method , a , b , c , d , e){
     if(object === null || object === undefined)return object;
     if(object[method])object[method](a,b,c,d,e);
-    if(yue.common[method]){
-        yue.common[method](a,b,c,d,e);
+    if(Yue.common[method]){
+        Yue.common[method](a,b,c,d,e);
     }
 };
 /*
  * 日期格式化
  * */
-yue.common.parseDate = function(date , format){
+Yue.common.parseDate = function(date , format){
   format = format || 'Y-m-d H:i:s';//默认转换格式
   if(!(date instanceof Date)){
     if(date - 0){
@@ -33,7 +33,7 @@ yue.common.parseDate = function(date , format){
     return time[a] || a;
   });
 };
-yue.common.parse = function(data){
+Yue.common.parse = function(data){
   try{
     return JSON.parse(data);
   }catch (e){
@@ -44,7 +44,7 @@ yue.common.parse = function(data){
     }
   }
 };
-yue.common.stringify = function(data){
+Yue.common.stringify = function(data){
   if(typeof data !== 'object')return data+'';
   try{
     return JSON.stringify(data) + '';
@@ -53,7 +53,7 @@ yue.common.stringify = function(data){
   }
 };
 
-yue.common.serialize = function(data){
+Yue.common.serialize = function(data){
   var str = '';
   for(var key in data){
     var o = data[key];
@@ -64,21 +64,21 @@ yue.common.serialize = function(data){
   }
   return str;
 };
-yue.common.concatImgUrl = function(url){
+Yue.common.concatImgUrl = function(url){
   if(!url)return url;
   if(/^http/.test(url))return url;
-  return (yue.session.apiImgUrl || localStorage.apiImgUrl) + url;
+  return (Yue.session.apiImgUrl || localStorage.apiImgUrl) + url;
 };
-yue.common.addUrlParam = function(url , param){
+Yue.common.addUrlParam = function(url , param){
   if(!param)return url;
   if(param && typeof param == 'object'){
-    param = yue.common.serialize(param);
+    param = Yue.common.serialize(param);
   }
   if(!param)return url;
   url += /\?/.test(url)?'&':'?';
   return url += param;
 };
-yue.common.getHrefData = function(url){
+Yue.common.getHrefData = function(url){
   if(!url)return {};
   if(url.indexOf('?')>=0)url = url.split('?')[1];
   var rt = {};
@@ -88,12 +88,12 @@ yue.common.getHrefData = function(url){
   });
   return rt;
 };
-yue.common.numberToCn = function(number){
+Yue.common.numberToCn = function(number){
   return (number+'').split('').reverse().map(function(a , i){
     return a!=0 && ('一二三四五六七八九'[a-1] + (i?'十':'')) || ''
   }).reverse().join('');
 };
-yue.common.sumTime = function(time , format){
+Yue.common.sumTime = function(time , format){
   format = format || 'dhis';
   var timeData = {
     d:'',
@@ -125,13 +125,13 @@ yue.common.sumTime = function(time , format){
     return timeData[a];
   });
 };
-yue.common.getLength = function(str){
+Yue.common.getLength = function(str){
   var len = str.length * 2;
   var match = str.match(new RegExp('[\\w\\s`~!@#$%^&*()-=+|\\[\\]{}"\',./<>?\\\\]','g'));
   if(match)len -= match.length;
   return len;
 };
-yue.common.convertBase64UrlToBlob = function (urlData , type){
+Yue.common.convertBase64UrlToBlob = function (urlData , type){
   var bytes=window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte
   //处理异常,将ascii码小于0的转换为大于0
   var ab = new ArrayBuffer(bytes.length);
@@ -141,7 +141,7 @@ yue.common.convertBase64UrlToBlob = function (urlData , type){
   }
   return new Blob( [ab] , {type : type});
 };
-yue.common.copyProp = function(o , prop){
+Yue.common.copyProp = function(o , prop){
   var rt = {};
   for(var key in prop){
     rt[key] = o[key];

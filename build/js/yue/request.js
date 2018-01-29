@@ -1,5 +1,5 @@
-yue.request = function(options){
-  yue.trigger('request-start-filter',options);
+Yue.request = function(options){
+  Yue.trigger('request-start-filter',options);
   options = Object.assign({
     method:'GET',
   },options);
@@ -12,17 +12,17 @@ yue.request = function(options){
       readyState = xmlHttp.readyState;
       if (xmlHttp.readyState===4){
         if(xmlHttp.status === 200){
-          options.success && options.success(yue.common.parse(xmlHttp.responseText));
-          yue.trigger('request-success' , xmlHttp.readyState , readyState)
+          options.success && options.success(Yue.common.parse(xmlHttp.responseText));
+          Yue.trigger('request-success' , xmlHttp.readyState , readyState)
         }else{
           options.error && options.error({
             state:xmlHttp.readyState,
             status:xmlHttp.status,
             readyState:readyState
-          },yue.common.parse(xmlHttp.responseText));
-          yue.trigger('request-status-error' , xmlHttp.status, yue.common.parse(xmlHttp.responseText));
+          },Yue.common.parse(xmlHttp.responseText));
+          Yue.trigger('request-status-error' , xmlHttp.status, Yue.common.parse(xmlHttp.responseText));
         }
-        yue.trigger('request-complete' , {
+        Yue.trigger('request-complete' , {
           state:xmlHttp.readyState,
           status:xmlHttp.status,
           readyState:readyState
@@ -33,8 +33,8 @@ yue.request = function(options){
         state:xmlHttp.readyState,
         readyState:readyState
       });
-      yue.trigger('request-state-error' , xmlHttp.readyState , readyState);
-      yue.trigger('request-complete' , {
+      Yue.trigger('request-state-error' , xmlHttp.readyState , readyState);
+      Yue.trigger('request-complete' , {
         state:xmlHttp.readyState,
         status:0,
         readyState:readyState
@@ -52,10 +52,10 @@ yue.request = function(options){
   }
   else if(options.method === 'POST'){
     options.headers['Content-Type']='application/json; charset=utf-8';
-    data = yue.common.stringify(options.data);
+    data = Yue.common.stringify(options.data);
   }
   else{
-    options.url = yue.common.addUrlParam(options.url , options.data);
+    options.url = Yue.common.addUrlParam(options.url , options.data);
   }
   xmlHttp.ontimeout = function(){
     options.error && options.error({
@@ -71,7 +71,7 @@ yue.request = function(options){
       readyState:0,
       message:'请求超时'
     });
-    yue.trigger('request-time-out');
+    Yue.trigger('request-time-out');
   };
   xmlHttp.timeout = options.timeout || 60000;
   xmlHttp.open(options.method,options.url,true);
@@ -81,44 +81,44 @@ yue.request = function(options){
     }
   }
   xmlHttp.send(data);
-  yue.trigger('request-send-filter' , options  , xmlHttp);
+  Yue.trigger('request-send-filter' , options  , xmlHttp);
   return xmlHttp;
 };
-yue.get = function(url , data , call , options){
+Yue.get = function(url , data , call , options){
   if(typeof data === 'function'){
     options = call;
     call = data;
     data = {};
   }
   options = options || {needAbort:1};
-  return yue.request(Object.assign({
+  return Yue.request(Object.assign({
     url:url,
     data:data,
     success:call
   },options));
 };
-yue.post = function(url , data , call , options){
+Yue.post = function(url , data , call , options){
   if(typeof data === 'function'){
     options = call;
     call = data;
     data = {};
   }
   options = options || {};
-  return yue.request(Object.assign({
+  return Yue.request(Object.assign({
     url:url,
     method:'POST',
     data:data,
     success:call
   },options));
 };
-yue.postFile = function(url , data , call , error){
+Yue.postFile = function(url , data , call , error){
   if(typeof data === 'function' && !call){
     call = data;
     data = {};
   }
   var timeout = data.timeout || 60 * 1000;
   delete data.timeout;
-  return yue.request({
+  return Yue.request({
     url:url,
     method:'POST',
     file:true,
