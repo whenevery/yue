@@ -1,4 +1,4 @@
-(function(){
+;(function(){
     var prop = Yue.prop = function (obj , key , func){
         if(!obj.prototype[key]){
             Object.defineProperty(obj.prototype , key , {
@@ -162,6 +162,4 @@
         }
         return rt;
     };
-
-
 })();

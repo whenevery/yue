@@ -250,6 +250,7 @@
 	/*
 	 * 用于验证参数有效性
 	 * */
+	if(typeof useValidate === 'undefined')window.useValidate = {};
 	useValidate.validator = function(rules , params){
 		var message;
 		for(var key in rules){

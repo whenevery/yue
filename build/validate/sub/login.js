@@ -1,4 +1,5 @@
 (function(){
+    if(typeof useValidate === undefined)useValidate  ={};
     useValidate.login = {
 		validator:function(data , type){
 			if(type == 'login'){

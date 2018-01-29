@@ -1,9 +1,5 @@
 //admin 1234yqs_admin
 module.exports = {
-    h5Api:'http://47.100.20.78:3002',
-    seatUrl:'http://47.100.20.78:3001',
-    wechatLoginUrl:'http://47.100.20.78:3002/wechat/entrance/test?port=3003&host=47.100.20.78',
-    wechatJssdkUrl:'http://47.100.20.78:3002/wechat/jssdk/test',
     "log4js":{
         "customBaseDir" :"../logs/yue/",
         "customDefaultAtt" :{

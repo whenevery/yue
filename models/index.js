@@ -6,7 +6,6 @@ module.exports = {
     common:require('./use-common'),
     validate:require('./use-validate'),
     data:require('./use-data'),
-    permission:require('./use-permission'),
     init:function(app , call){
         //捕获异步产生的异常
         app.use(this.domain);
@@ -14,7 +13,6 @@ module.exports = {
         global.useCommon = this.common;
         //加载配置
         global.useConfig = this.config;
-        global.useCaptcha = require('./captcha.js');
         this.config.start(app);
         //封装新的render
         app.use(require('./use-render'));
@@ -32,24 +30,20 @@ module.exports = {
         global.useRequest = require('./use-request');
         //validate
         global.useValidate = this.validate;
-        //validate
-        global.usePermission = this.permission;
         //加载session
-        app.use(require('express-session')({
-            resave:false,
-            secret:'yuke-merchant',
-            name:'yuke-merchant',
-            saveUninitialized: true,
-            cookie:{
-                maxAge:12*3600*1000
-            }
-        }));
-        global.usePageSize = 20;
+        // app.use(require('express-session')({
+        //     resave:false,
+        //     secret:'yue',
+        //     name:'yue',
+        //     saveUninitialized: true,
+        //     cookie:{
+        //         maxAge:12*3600*1000
+        //     }
+        // }));
         app.use(function(req , res , next){
-            req.session.supplierId = req.session.supplierId || 1;
             var method = req.method;
             //403
-            req.session.__CSRF = req.session.__CSRF || Date.now() + '';
+            //req.session.__CSRF = req.session.__CSRF || Date.now() + '';
             // if(method === 'POST' && req.url.indexOf('file') === -1&& req.url.indexOf('test') === -1&& req.url.indexOf('server') === -1&& req.url.indexOf('login') === -1){
             //     if(req.body.__CSRF !== req.session.__CSRF){
             //         return res.sendErrorMessage('HTTP_CODE_403','');

@@ -1,4 +1,4 @@
-(function(){
+;(function(){
     var isLoading;
     var $loadingWindow
     Yue.loading = function(sts){

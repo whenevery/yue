@@ -1,4 +1,4 @@
-(function(){
+;(function(){
     /*
     * path 路径
     * name 名称

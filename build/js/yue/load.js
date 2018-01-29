@@ -1,4 +1,4 @@
-(function(){
+;(function(){
     Yue.bind('router-before' , function(){
         if(Yue.autoYueObj && Yue.autoYueObj.__yueDom){
             removeDom(Yue.autoYueObj.__yueDom);

@@ -1,4 +1,4 @@
-(function(obj){
+;(function(obj){
     if(!obj.Promise){
         var Promise = function(call){
             var that = this;

@@ -1,4 +1,4 @@
-(function(){
+;(function(){
     var Yue = window.Yue;
     var handlers = {};
     var readyHandler = {};
