@@ -38,23 +38,9 @@ gulp.task('concatJs',['less'], function(cb) {
 /**
  * 上线编译任务
  */
-gulp.task('images',['concatJs'],function(cb) {
-    console.log('images rev');
-    gulp.src('build/images/**')
-    .pipe(rev())
-    .pipe(gulp.dest('public/images'))
-    .pipe(rev.manifest())
-    .pipe(gulp.dest('rev/images')).on('end',cb);
-});
-gulp.task('css',['images'],function(cb) {
+gulp.task('css',['concatJs'],function(cb) {
     console.log('css rev');
     gulp.src(['rev/**/*.json', 'build/css/**/*.css'])
-    .pipe(revCollector({
-        replaceReved: true,
-        dirReplacements: {
-            'images/': 'images/'
-        }
-    }))
     .pipe(gulp.dest('rev/css'))
     .pipe(rev())
     .pipe(gulp.dest('public/css'))
@@ -63,33 +49,13 @@ gulp.task('css',['images'],function(cb) {
     .pipe(rev.manifest())
     .pipe(gulp.dest('rev/css')).on('end',cb);
 });
-gulp.task('js',['css'],function(cb) {
-    console.log('js rev');
-    gulp.src(['rev/**/*.json', 'build/js/**/*.js'])
-    .pipe(revCollector({
-        replaceReved: true,
-        dirReplacements: {
-            'images/': 'images/',
-            'css/': 'css/'
-        }
-    }))
-    .pipe(gulp.dest('rev/js'))
-    .pipe(rev())
-    .pipe(gulp.dest('public/js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('public/js'))
-    .pipe(rev.manifest())
-    .pipe(gulp.dest('rev/js')).on('end',cb);
-});
-gulp.task('rev',['js'],function(cb) {
+gulp.task('rev',['css'],function(cb) {
     console.log('rev');
     gulp.src(['rev/**/*.json', 'build/views/**/*.html'])
     .pipe(revCollector({
         replaceReved: true,
         dirReplacements: {
             'css/': 'css/',
-            'js/': 'js/',
-            'images/': 'images/'
         }
     }))
     .pipe(gulp.dest('views'))
@@ -100,9 +66,9 @@ gulp.task('default',['concatJs'],function() {
 });
 gulp.task('build',['rev'],function(cb) {
     console.log('build gulp');
-    // gulp.src(['./build/images/**']).pipe(gulp.dest('./public/images'));
+    gulp.src(['./build/images/**']).pipe(gulp.dest('./public/images'));
     // gulp.src(['./build/css/**']).pipe(minifycss()).pipe(gulp.dest('./public/css')); //
-    // gulp.src(['./build/js/**']).pipe(uglify()).pipe(gulp.dest('./public/js')); //
+    gulp.src(['./build/js/**']).pipe(uglify()).pipe(gulp.dest('./public/js')); //
     // gulp.src(['./build/views/**']).pipe(gulp.dest('views'));
     gulp.src(['./build/common/**']).pipe(uglify()).pipe(gulp.dest('./public/common')); //
     gulp.src(['./build/enum/**']).pipe(uglify()).pipe(gulp.dest('./public/enum')); //

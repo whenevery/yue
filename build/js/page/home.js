@@ -30,6 +30,14 @@ module.exports = function(){
         destroy:function(){
 
         },
+        directives:{
+            canvas:{
+                done:function(el , data){
+                    console.log('directives canvas has done');
+                    console.log(el , data);
+                }
+            }
+        },
         methods:{
             click:function(el,ev){
                 console.log(el,ev);

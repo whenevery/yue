@@ -17,7 +17,7 @@ var archiveFilePath = path.join(__dirname, package.name + '-' + package.version 
 	zipArchive.pipe(output);
 
 	//设置打包文件
-	var zipList=['app.js','package.json', 'config/**', 'controller/**', 'copperation/**', 'models/**', 'node_modules/**',  'public/**', 'views/**'];
+	var zipList=['app.js','package.json', 'config/**', 'controller/**',  'models/**', 'node_modules/**',  'public/**', 'views/**'];
 	//打包运行库
 	for(var key in package.dependencies){
 		//zipList.push('node_modules/'+key+'/**');

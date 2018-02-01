@@ -41,7 +41,6 @@
             valArr = val.split(' in ');
             dataKey = valArr[1];
             var firstStr = valArr[0].replace(/\(|\)/g,'');
-            console.log('firstStr',firstStr);
             item = firstStr.split(',')[0];
             index = firstStr.split(',')[1] || index;
         }
@@ -145,7 +144,6 @@
             if(existChange)if(forOn)thisYueClone[thisIndex] = [];
             if(forOn){
                 forData= getForData(forOn.val , data);
-                console.log('forData',forData);
             }
             if(forOn)thisYueClone = thisYueClone[thisIndex];
             var prevDom = oldClone;
@@ -219,6 +217,28 @@
             if(oldClone)oldClone.remove();
         }
     }
+    function setAttribute(cl , key , val){
+        if(key === 'class'){
+            cl.className = val;
+        }
+        else if(key === 'style'){
+            if(val){
+                val = val.split(';');
+                val.forEach(function(a){
+                   var arr = a.split(':');
+                   cl.style[arr[0]] = arr[1];
+                });
+            }
+        }
+        else if(['readonly','checked','selected'].indexOf(key)>-1){
+            cl.prop(key ,val );
+        }
+        else if(['id','name','type','value'].indexOf(key)>-1){
+            cl[key] = val;
+        }else{
+            cl.setAttribute(key , val);
+        }
+    }
     function domShow(el , data , methods ,yueModal , cl){
         cl = cl || el.yueClone[0];
         if(cl){
@@ -229,6 +249,14 @@
             }
             cl.yueData = data;
             Yue.directive.handler(el , data , yueModal , cl);
+            if(el.yueAttr){
+                if(!cl.hasYueAttr){
+                    el.yueAttr.forEach(function(a){
+                        setAttribute( cl ,a.key , a.val);
+                    });
+                    cl.hasYueAttr = 1;
+                }
+            }
             if(el.yueOn)el.yueOn.forEach(function(a){
                 if(['if','for'].indexOf(a.key) === -1){
                     var dataValue = data.getYueValue(a.val);
@@ -258,19 +286,9 @@
                             else cl.classList.add(dataValue);
                         }
                     }else{
-                        if(['readonly','checked','selected'].indexOf(a.key)>-1){
-                            cl.prop(a.key ,dataValue );
-                        }
-                        else if(['id','name','type','value'].indexOf(a.key)>-1){
-                            cl[a.key] = dataValue;
-                        }else{
-                            cl.setAttribute(a.key , dataValue);
-                        }
+                        setAttribute( cl ,a.key , dataValue);
                     }
                 }
-            });
-            if(el.yueAttr)el.yueAttr.forEach(function(a){
-                cl.setAttribute(a.key , a.val);
             });
             Yue.domBind(el , methods , data , yueModal , cl);
         }
@@ -331,10 +349,13 @@
         var dom,data,methods,yueModal = {},valueData={};
         dom = createDom(router.view);
         yueModal.__yueDom = dom;
+        yueModal.__baseData = jsData;
         data = jsData.data;
         methods = jsData.methods;
+        delete jsData.data;
+        delete jsData.methods;
         function changeHandler(){
-            domClone(dom , valueData , methods , null , yueModal);
+            if(yueModal.isCreated)domClone(dom , valueData , methods , null , yueModal);
         }
         yueModal.setData = function(data){
             if(data)for(var key in data){
@@ -361,8 +382,18 @@
             for(var key in methods){
                 Yue.definePropertyGet(yueModal , key , methods);
             }
+            next();
+        });
+        queue.add(function(next){
+            if(jsData.created){
+                jsData.created.call(yueModal);
+            }
+            yueModal.isCreated = 1;
+            next();
+        });
+        queue.add(function(next){
             evalDom(dom , valueData , methods);
-            Yue.routerDom.appendChild(domClone(dom , valueData , methods , null , yueModal));
+            domClone(dom , valueData , methods , Yue.routerDom , yueModal);
             if(call)call(yueModal);
         });
         queue.start();

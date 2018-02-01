@@ -58,7 +58,8 @@ text {
   display: inline-block;
   font-size: 14px;
 }
-body {
+body,
+html {
   padding: 0;
   margin: 0;
   height: 100%;
@@ -72,7 +73,8 @@ ul,
 li,
 span,
 a,
-label {
+label,
+html {
   box-sizing: border-box;
 }
 .cursor-pointer {
@@ -81,7 +83,6 @@ label {
 html {
   font-size: 50px;
   color: #333;
-  height: 100%;
 }
 div::-webkit-scrollbar {
   display: none;
@@ -308,6 +309,9 @@ div::-webkit-scrollbar {
 .height-40 {
   height: .4rem;
 }
+.height-80 {
+  height: .8rem;
+}
 .height-30 {
   height: .3rem;
 }
@@ -316,6 +320,9 @@ div::-webkit-scrollbar {
 }
 .lh-0 {
   line-height: 0;
+}
+.lh-1 {
+  line-height: 1;
 }
 .max-h-300 {
   max-height: 3rem;
@@ -597,6 +604,18 @@ div::-webkit-scrollbar {
   -webkit-box-align: start;
   -webkit-align-items: flex-start;
   align-items: flex-start;
+}
+.flex-column {
+  -webkit-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+.flex-grow {
+  flex-grow: 1;
+}
+.flex-shrink {
+  flex-shrink: 0;
 }
 .flex-basis-30 {
   flex-basis: 30px;
