@@ -5,7 +5,6 @@ var express = require('express'),
 	bodyParser = require('body-parser'),
 	app = express();
 global.__ROOT__ = __dirname;
-process.env.NODE_ENV = '1';
 global.publicDir = process.env.NODE_ENV?'public':'build';
 global.viewDir = process.env.NODE_ENV?'views':'build/views';
 //静态文件目录

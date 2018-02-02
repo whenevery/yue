@@ -1,0 +1,18 @@
+Yue.router.push({
+    path:'/',
+    name:'skew',
+    component:'skew',
+    js:'/js/page/skew.js',
+});
+Yue.router.push({
+    path:'/canvas',
+    name:'canvas',
+    component:'canvas',
+    js:'/js/page/canvas.js',
+});
+Yue.router.push({
+    path:'/home',
+    name:'home',
+    component:'home',
+    js:'/js/page/home.js',
+});
