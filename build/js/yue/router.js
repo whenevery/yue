@@ -11,9 +11,9 @@
     var historyRouters = [];
     var options = router.options = {
         mode:'history',
-        viewUrl:'/Yue/view',
+        viewUrl:'/yue/view',
         viewKey:'view',
-        htmlUrl:'/Yue/html',
+        htmlUrl:'/yue/html',
         htmlKey:'html',
     };
     router.start = function(url){

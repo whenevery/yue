@@ -16,3 +16,15 @@ Yue.router.push({
     component:'home',
     js:'/js/page/home.js',
 });
+Yue.router.push({
+    path:'/scrape',
+    name:'scrape',
+    component:'scrape',
+    js:'/js/page/scrape.js',
+});
+Yue.router.push({
+    path:'/scrape/new',
+    name:'scrape-new',
+    component:'scrape',
+    js:'/js/page/scrape-new.js',
+});
