@@ -28,3 +28,9 @@ Yue.router.push({
     component:'scrape',
     js:'/js/page/scrape-new.js',
 });
+Yue.router.push({
+    path:'/region',
+    name:'region',
+    component:'region',
+    js:'/js/page/region.js',
+});

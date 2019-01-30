@@ -1,5 +1,5 @@
 module.exports = {
-    port:3000,
+    port:88,
     "log4js":{
         "customBaseDir" :"/logs/",
         "customDefaultAtt" :{

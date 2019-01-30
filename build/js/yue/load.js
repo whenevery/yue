@@ -405,4 +405,13 @@
         if(call)call(res);
         return res;
     };
+    Yue.loadFrame = function(url , call){
+        var iframe = document.createElement('iframe')
+        iframe.src = url
+      iframe.onload = function(){
+        if(call)call(iframe.contentWindow, iframe.contentDocument, iframe);
+      }
+      iframe.style.width = 0
+      document.body.appendChild(iframe)
+    };
 })();
